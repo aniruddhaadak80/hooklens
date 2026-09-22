@@ -4,13 +4,13 @@
 
 **Catch, inspect & debug webhooks in real time — a bin URL that records every request, a terminal UI that explains every payload, and MCP tools so your AI agent debugs webhooks itself.**
 
-[![Live Demo](https://img.shields.io/badge/demo-live-a3e635?style=for-the-badge)](https://hooklens.vercel.app)
+[![Live Demo](https://img.shields.io/badge/demo-live-a3e635?style=for-the-badge)](https://hooklens-brown.vercel.app)
 [![License: MIT](https://img.shields.io/badge/license-MIT-34d399?style=for-the-badge)](./LICENSE)
 [![Next.js](https://img.shields.io/badge/next.js-16-black?style=for-the-badge)](https://nextjs.org)
 [![Neon Postgres](https://img.shields.io/badge/store-neon_postgres-22d3ee?style=for-the-badge)](https://neon.tech)
 [![MCP](https://img.shields.io/badge/MCP-json--rpc-fbbf24?style=for-the-badge)](#-agent-interface)
 
-[Live App](https://hooklens.vercel.app) · [Bins](https://hooklens.vercel.app/bins) · [Docs](https://hooklens.vercel.app/docs) · [MCP](https://hooklens.vercel.app/api/mcp) · [Issues](https://github.com/aniruddhaadak80/hooklens/issues)
+[Live App](https://hooklens-brown.vercel.app) · [Bins](https://hooklens-brown.vercel.app/bins) · [Docs](https://hooklens-brown.vercel.app/docs) · [MCP](https://hooklens-brown.vercel.app/api/mcp) · [Issues](https://github.com/aniruddhaadak80/hooklens/issues)
 
 </div>
 
@@ -176,7 +176,7 @@ Prod: `vercel env add DATABASE_URL production` (and CI secret `DATABASE_URL`).
 ## 🔌 API
 
 ```bash
-BASE=https://hooklens.vercel.app
+BASE=https://hooklens-brown.vercel.app
 curl -X POST $BASE/api/bins -H 'content-type: application/json' -d '{"name":"stripe"}'
 # → {"bin":{"id":"bin_k7q2m9xd", ...}} — grab the id
 curl -X POST $BASE/api/hook/bin_k7q2m9xd -H 'content-type: application/json' -d '{"type":"order.paid"}'
@@ -192,7 +192,7 @@ Agent setup (`mcp.json` block — full manifest in `public/mcp.json`):
 ```json
 {
   "mcpServers": {
-    "hooklens": { "url": "https://hooklens.vercel.app/api/mcp", "transport": "json-rpc" }
+    "hooklens": { "url": "https://hooklens-brown.vercel.app/api/mcp", "transport": "json-rpc" }
   }
 }
 ```

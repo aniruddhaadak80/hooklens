@@ -2,7 +2,7 @@ import McpConsole from "@/components/McpConsole";
 
 export const dynamic = "force-static";
 
-const BASE = "https://hooklens.vercel.app";
+const BASE = "https://hooklens-brown.vercel.app";
 
 export default function DocsPage() {
   return (

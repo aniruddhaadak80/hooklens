@@ -88,7 +88,9 @@ export async function addRequest(input: {
 
 export async function listRequests(binId: string, limit = 25): Promise<CapturedRequest[]> {
   assertBinId(binId);
-  const lim = Math.min(100, Math.max(1, limit));
+  // A value that is not a finite number (for example `?limit=abc`) must not
+  // reach the SQL LIMIT: Postgres rejects NaN and the route would 500.
+  const lim = Number.isFinite(limit) ? Math.min(100, Math.max(1, Math.floor(limit))) : 25;
   const db = sql();
   const rows = await db`SELECT id, bin_id, method, headers, query, body, size, seal, prev_seal, received_at FROM requests WHERE bin_id = ${binId} ORDER BY received_at DESC, id DESC LIMIT ${lim}`;
   return rows as unknown as CapturedRequest[];

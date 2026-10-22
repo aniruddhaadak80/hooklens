@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { addRequest, getBin, lastSeal } from "@/lib/db";
+import { readCappedBody } from "@/lib/capture";
 import { newId, sealRecord } from "@/lib/seal";
 
 export const dynamic = "force-dynamic";
@@ -20,18 +21,16 @@ async function capture(req: Request, id: string) {
   const query: Record<string, string> = {};
   for (const [k, v] of url.searchParams.entries()) query[k.slice(0, 128)] = v.slice(0, 1024);
 
-  let body = "";
-  try {
-    body = (await req.text()).slice(0, MAX_BODY);
-  } catch { body = ""; }
-  const size = Buffer.byteLength(body, "utf8");
+  // Read at most MAX_BODY *bytes*; the rest of the upload is discarded instead
+  // of being buffered in full. `size` is what the sender actually sent.
+  const { body, size, truncated } = await readCappedBody(req, MAX_BODY);
 
   const reqId = newId("req");
   const prevSeal = await lastSeal(id);
   const record = { id: reqId, bin_id: id, method: req.method, headers, query, body, size };
   const seal = sealRecord(record, prevSeal);
   await addRequest({ id: reqId, binId: id, method: req.method, headers, query, body, size, seal, prevSeal });
-  return NextResponse.json({ ok: true, id: reqId, seal });
+  return NextResponse.json({ ok: true, id: reqId, seal, truncated });
 }
 
 export async function GET(req: Request, ctx: { params: Promise<{ id: string }> }) {
